@@ -1,0 +1,1 @@
+The front-end of this application is developed using the latest React framework, with a separate back-end implementation. Key dependencies in the React stack include PrimeReact for UI components, Redux for state management, Normalizr for data normalization, and Axios for API communication.
