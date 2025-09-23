@@ -1,0 +1,42 @@
+body {
+font: 16px/1.4 Trebuchet, Tahoma, Verdana !important;
+color: #5f4c62;
+margin: 0;
+padding: 0;
+background: #f6f1f1;
+letter-spacing: 0.5px;
+}
+
+h1, h2, h3, h4, h5 {
+font-family: Trebuchet, Tahoma, Verdana !important;
+font-weight: 300 !important;
+color: #5f4c62 !important;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+color: #EEEEEE;
+font-weight: 300;
+}
+
+a:hover {
+color: #EEEEEE;
+}
+
+img {
+width: 100%;
+}
+
+input[type="radio"] {
+cursor: pointer;
+height: 18px !important;
+width: 18px !important;
+}
+
+label
+{
+cursor: pointer;
+}
