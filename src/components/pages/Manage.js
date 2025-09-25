@@ -73,7 +73,6 @@ class Manage extends React.Component {
   }
 
   componentDidMount() {
-    //this.onInit(this.props);
    const fetchAdminData = async () => {
      await this.getAllAdmin(this.props.username);
    };
@@ -232,17 +231,23 @@ class Manage extends React.Component {
           uploaddate: item.uploaddate ? item.uploaddate.substring(0, 10) : null,
           coursename: item.coursename,
         }));
-        const getFinalData = [];
-
-        const allStudentList = getAllStudents.filter(
-          (card) =>
-          card.coursename === this.state.selectedCourse
-         );
+      
+      const getFinalData = [];
+      const allStudentList = getAllStudents
+      .filter((card) => card.coursename === this.state.selectedCourse)
+      .filter((card, index, self) =>
+        index ===
+        self.findIndex(
+          (c) =>
+            c.cardnumber === card.cardnumber &&
+            c.uploaddate === card.uploaddate &&
+            c.coursename === card.coursename
+        )
+      );
 
         this.setState({ allstudents: allStudentList });
 
-
-        // Step 1: Extract unique dates only for the matching course name
+        // Extract unique dates only for the matching course name
         const uniqueDates = [
          ...new Set(
          getCardData
@@ -1585,4 +1590,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { eligibleUploadSubmit })(Manage);
+
 
