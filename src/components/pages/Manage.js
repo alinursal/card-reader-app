@@ -187,10 +187,21 @@ class Manage extends React.Component {
           verified: item.verified,
         }));
 
-        const finalResult = getResult.filter(
-          (card) =>
-          card.coursename === getCourseName
+      const finalResult = getResult
+      .filter((card) => card.coursename === getCourseName)
+      .filter((card, index, self) => {
+        const key = `${card.cardnumber}-${card.date}-${card.coursename}-${card.verified}`;
+        return (
+          index ===
+          self.findIndex(
+            (c) =>
+              c.cardnumber === card.cardnumber &&
+              c.date === card.date &&
+              c.coursename === card.coursename &&
+              c.verified === card.verified
+          )
         );
+      });
 
         let dropdown = [];
 
@@ -998,35 +1009,40 @@ class Manage extends React.Component {
         <h4 className="makeBold">Manage Students</h4>
         <br/>
         <Dropdown value={this.state.selectedDate} onChange={this.onDateChange} options={this.state.dropdownDate} optionLabel="name" placeholder="Select Course Date" 
-        filter showClear className="w-full md:w-16rem cstmSizeDropDownDate" />
+        filter showClear className="w-full md:w-16rem" />
          <br/><br/>
-         <Checkbox
-          onChange={this.onAbsenceCheckboxChange}
-          checked={this.state.absenceChecked}
-         />
-         <label className="ml-2">Absent</label>
-         <Checkbox
-         onChange={this.onPresentCheckboxChange}
-         checked={this.state.presentChecked}
-         style={{ marginLeft: '15px' }}
-         />
-         <label className="ml-2">Present</label>
+          {this.state.selectedDate && (
+            <>
+              <Checkbox
+                onChange={this.onAbsenceCheckboxChange}
+                checked={this.state.absenceChecked}
+              />
+              <label className="ml-2">Absent</label>
+              <Checkbox
+                onChange={this.onPresentCheckboxChange}
+                checked={this.state.presentChecked}
+                style={{ marginLeft: '15px' }}
+              />
+              <label className="ml-2">Present</label>
+            </>
+          )}
         </div>
         <div className="toTheRight">
         <br/>
-         <IconField iconPosition="left">
-          <InputIcon className="pi pi-search" />
-          <InputText
-            type="search"
-            placeholder="Search..."
-            onInput={(e) => this.setState({ globalFilter: e.target.value })}
-            className="cstmSizeSearchBar"
-          />
-         </IconField>
+          {this.state.selectedDate && (
+            <IconField iconPosition="left">
+              <InputIcon className="pi pi-search" style={{ marginTop: '-10px' }}/>
+              <InputText
+                type="search"
+                placeholder="Search..."
+                onInput={(e) => this.setState({ globalFilter: e.target.value })}
+                style={{ marginTop: '-10px' }}
+              />
+            </IconField>
+          )}
         </div>
       </div>
-      {this.state.data &&
-        (
+      {this.state.selectedDate && this.state.data && (
         <div>
           <br/>
           <p className="toTheLeft">{this.state.data.length} in total</p>
@@ -1206,7 +1222,7 @@ class Manage extends React.Component {
   };
 
   render() {
-    const { data, students, allstudents, uploaddata, uploadsingledata, first, rows, rowsPerPageOptions, globalFilter, globalFilterStudent, selectedStudentList, productDialog, uploadDialog, uploadSingleDialog, product, submitted, dropdownCourse, selectedCourse, addAdminDialog, addAdmin, addCourseDialog, addCourse, courseadmin, allcourses, globalFilterAdmin, globalFilterCourseList, selectedAdminList, selectedCourseList } = this.state;
+    const { data, students, allstudents, uploaddata, uploadsingledata, first, rows, rowsPerPageOptions, globalFilter, globalFilterStudent, selectedStudentList, productDialog, uploadDialog, uploadSingleDialog, product, submitted, dropdownCourse, selectedCourse, addAdminDialog, addAdmin, addCourseDialog, addCourse, courseadmin, allcourses, globalFilterAdmin, globalFilterCourseList, selectedAdminList, selectedCourseList, selectedDate } = this.state;
 
     return (
       <div className="flex flex-wrap">
@@ -1270,6 +1286,9 @@ class Manage extends React.Component {
                   </div>
                  )}
                 <br/><br/><br/>
+                {this.renderHeader()}
+                {selectedDate && (
+                <>
                 <Toolbar className="mb-4" left={this.leftToolbarTemplate} right={this.rightToolbarTemplate} />
                 <DataTable
                   ref={this.dt}
@@ -1278,7 +1297,6 @@ class Manage extends React.Component {
                   paginator
                   rows={rows}
                   globalFilter={globalFilter}
-                  header={this.renderHeader()}
                   emptyMessage="No records found"
                 >
                   <Column field="cardnumber" header="Card Number" editor={(options) => this.textEditor(options)} sortable />
@@ -1293,6 +1311,8 @@ class Manage extends React.Component {
                   rowsPerPageOptions={rowsPerPageOptions}
                   onPageChange={this.onPageChange}
                 />
+                </>
+                )}
               </Card>
             </div>
           </div>
@@ -1565,3 +1585,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { eligibleUploadSubmit })(Manage);
+
