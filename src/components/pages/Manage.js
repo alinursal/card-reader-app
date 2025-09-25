@@ -306,14 +306,22 @@ class Manage extends React.Component {
        }
       }
 
-      if(getFinalData && getFinalData.length>0){
-          const uniqueData = getFinalData.filter(
-           (thing, index, self) =>
-           index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(thing))
-          );
-          getFinalData.length = 0;
-          getFinalData.push(...uniqueData);
-      }
+   if (getFinalData && getFinalData.length > 0) {
+    const uniqueData = getFinalData.filter(
+    (thing, index, self) =>
+      index ===
+      self.findIndex(
+        (t) =>
+          t.cardnumber === thing.cardnumber &&
+          t.date === thing.date &&   // 
+          t.coursename === thing.coursename &&
+          t.status === thing.status  // 
+      )
+    );
+
+    getFinalData.length = 0;
+    getFinalData.push(...uniqueData);
+   }
 
         const dataLength = getFinalData.length;
         const rowsPerPageOptions = this.calculateRowsPerPageOptions(dataLength);
@@ -1590,5 +1598,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { eligibleUploadSubmit })(Manage);
+
 
 
